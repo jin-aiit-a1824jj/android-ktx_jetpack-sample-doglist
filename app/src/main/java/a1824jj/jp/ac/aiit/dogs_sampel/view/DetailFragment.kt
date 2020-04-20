@@ -8,13 +8,20 @@ import android.view.ViewGroup
 
 import a1824jj.jp.ac.aiit.dogs_sampel.R
 import a1824jj.jp.ac.aiit.dogs_sampel.databinding.FragmentDetailBinding
+import a1824jj.jp.ac.aiit.dogs_sampel.model.DogPaletter
 import a1824jj.jp.ac.aiit.dogs_sampel.util.getProgressDrawable
 import a1824jj.jp.ac.aiit.dogs_sampel.util.loadImage
 import a1824jj.jp.ac.aiit.dogs_sampel.viewmodel.DetailViewModel
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.palette.graphics.Palette
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.fragment_detail.*
 
 /**
@@ -33,7 +40,7 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail, container, false)
-        return dataBinding.root//inflater.inflate(R.layout.fragment_detail, container, false)
+        return dataBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,17 +56,31 @@ class DetailFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.dogLiveData.observe(this, Observer {
-//            it?.let {
-////                dogName.text = it.dogBreed
-////                dogPurpose.text = it.bredFor
-////                dogTemperament.text = it.temperament
-////                dogLifespan.text = it.lifeSpan
-////                context?.let {context ->
-////                    dogImage.loadImage(it.imageUrl, getProgressDrawable(context))
-////                }
-////
-////            }
             dataBinding.dog = it
+            it.imageUrl?.let { url ->
+                setupBackGroundColor(url)
+            }
         })
+    }
+
+    private fun setupBackGroundColor(url: String) {
+        Glide.with(this)
+            .asBitmap()
+            .load(url)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onLoadCleared(placeholder: Drawable?) {
+
+                }
+
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    Palette.from(resource)
+                        .generate {
+                            val intColor = it?.lightMutedSwatch?.rgb ?: 0
+                            val myPalette = DogPaletter(intColor)
+                            dataBinding.palettee = myPalette
+                        }
+                }
+
+            })
     }
 }

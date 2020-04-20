@@ -8,12 +8,16 @@
         <variable
             name="dog"
             type="a1824jj.jp.ac.aiit.dogs_sampel.model.DogBreed" />
+        <variable
+            name="palettee"
+            type="a1824jj.jp.ac.aiit.dogs_sampel.model.DogPaletter" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.DetailFragment">
+        tools:context=".view.DetailFragment"
+        android:background="@{palettee.color}">
 
 
         <ImageView
