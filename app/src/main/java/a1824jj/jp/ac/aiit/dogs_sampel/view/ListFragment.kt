@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 
 import a1824jj.jp.ac.aiit.dogs_sampel.R
+import androidx.navigation.Navigation
+import kotlinx.android.synthetic.main.fragment_list.*
 
 /**
  * A simple [Fragment] subclass.
@@ -21,4 +23,12 @@ class ListFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_list, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        buttonList.setOnClickListener {
+            val action = ListFragmentDirections.actionDetailFragment()
+            Navigation.findNavController(it).navigate(action)
+        }
+
+    }
 }

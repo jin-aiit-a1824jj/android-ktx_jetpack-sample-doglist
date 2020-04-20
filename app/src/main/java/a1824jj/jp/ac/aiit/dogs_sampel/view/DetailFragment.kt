@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 
 import a1824jj.jp.ac.aiit.dogs_sampel.R
+import androidx.navigation.Navigation
+import kotlinx.android.synthetic.main.fragment_detail.*
 
 /**
  * A simple [Fragment] subclass.
@@ -21,4 +23,11 @@ class DetailFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_detail, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        buttonDetail.setOnClickListener {
+            val action = DetailFragmentDirections.actionListFragment()
+            Navigation.findNavController(it).navigate(action)
+        }
+    }
 }
