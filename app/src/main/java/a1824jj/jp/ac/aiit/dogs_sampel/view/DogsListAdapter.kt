@@ -6,6 +6,7 @@ import a1824jj.jp.ac.aiit.dogs_sampel.model.DogBreed
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_dog.view.*
 
@@ -24,6 +25,9 @@ class DogsListAdapter(private val dogsList: ArrayList<DogBreed>): RecyclerView.A
     override fun onBindViewHolder(holder: DogViewHolder, position: Int) {
         holder.view.name.text = dogsList[position].dogBreed
         holder.view.lifespan.text = dogsList[position].lifeSpan
+        holder.view.setOnClickListener{
+            Navigation.findNavController(it).navigate(ListFragmentDirections.actionDetailFragment())
+        }
     }
 
     fun updateDogList(newDogsList: List<DogBreed>){
