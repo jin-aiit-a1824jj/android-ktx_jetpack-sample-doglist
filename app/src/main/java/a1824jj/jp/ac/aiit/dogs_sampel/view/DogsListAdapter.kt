@@ -1,5 +1,6 @@
 package a1824jj.jp.ac.aiit.dogs_sampel.view
 
+
 import a1824jj.jp.ac.aiit.dogs_sampel.R
 import a1824jj.jp.ac.aiit.dogs_sampel.model.DogBreed
 import android.view.LayoutInflater
