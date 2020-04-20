@@ -5,6 +5,7 @@ import a1824jj.jp.ac.aiit.dogs_sampel.model.DogDatabase
 import a1824jj.jp.ac.aiit.dogs_sampel.model.DogsApiService
 import a1824jj.jp.ac.aiit.dogs_sampel.util.SharedPreferencesHelper
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Scheduler
@@ -25,9 +26,16 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
     private val disposable = CompositeDisposable()
 
     private var prefHelper = SharedPreferencesHelper(getApplication())
+    private var refreshTime = 5 * 60 * 1000 * 1000 * 1000L //5second -> nanosecond
+
 
     fun refresh(){
-        fetchFromRemote()
+        val updateTime = prefHelper.getUpdateTime()
+        if(updateTime != null && updateTime != 0L && System.nanoTime() - updateTime < refreshTime) {
+            fetchFromDatabase()
+        }else{
+            fetchFromRemote()
+        }
     }
 
     private fun fetchFromRemote(){
@@ -39,6 +47,7 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
                 .subscribeWith(object: DisposableSingleObserver<List<DogBreed>>(){
                     override fun onSuccess(t: List<DogBreed>) {
                         storeDogsLocally(t)
+                        Toast.makeText(getApplication(), "Dogs retrieved from endpoint", Toast.LENGTH_LONG).show()
                     }
 
                     override fun onError(e: Throwable) {
@@ -76,4 +85,19 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
         }
         prefHelper.saveUpdateTime(System.nanoTime())
     }
+
+
+    private fun fetchFromDatabase() {
+        loading.value = true
+        launch {
+            val dogs = DogDatabase(getApplication()).dogDao().getAllDogs()
+            dogsRetrieved(dogs)
+            Toast.makeText(getApplication(), "Dogs retrieved from database", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    fun refreshBypassCache() {
+        fetchFromRemote()
+    }
+
 }
