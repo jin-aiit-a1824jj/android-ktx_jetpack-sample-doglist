@@ -3,6 +3,7 @@ package a1824jj.jp.ac.aiit.dogs_sampel.viewmodel
 import a1824jj.jp.ac.aiit.dogs_sampel.model.DogBreed
 import a1824jj.jp.ac.aiit.dogs_sampel.model.DogDatabase
 import a1824jj.jp.ac.aiit.dogs_sampel.model.DogsApiService
+import a1824jj.jp.ac.aiit.dogs_sampel.util.SharedPreferencesHelper
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,6 +23,8 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
 
     private val dogsService = DogsApiService()
     private val disposable = CompositeDisposable()
+
+    private var prefHelper = SharedPreferencesHelper(getApplication())
 
     fun refresh(){
         fetchFromRemote()
@@ -71,5 +74,6 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
             }
             dogsRetrieved(dogList)
         }
+        prefHelper.saveUpdateTime(System.nanoTime())
     }
 }
