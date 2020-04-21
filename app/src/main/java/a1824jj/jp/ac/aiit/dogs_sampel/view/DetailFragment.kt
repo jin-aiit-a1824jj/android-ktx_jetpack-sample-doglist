@@ -2,9 +2,6 @@ package a1824jj.jp.ac.aiit.dogs_sampel.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 
 import a1824jj.jp.ac.aiit.dogs_sampel.R
 import a1824jj.jp.ac.aiit.dogs_sampel.databinding.FragmentDetailBinding
@@ -14,6 +11,7 @@ import a1824jj.jp.ac.aiit.dogs_sampel.util.loadImage
 import a1824jj.jp.ac.aiit.dogs_sampel.viewmodel.DetailViewModel
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -40,6 +38,7 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail, container, false)
+        setHasOptionsMenu(true)
         return dataBinding.root
     }
 
@@ -82,5 +81,24 @@ class DetailFragment : Fragment() {
                 }
 
             })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.detail_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.action_send_sms -> {
+
+            }
+
+            R.id.action_share -> {
+
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 }
