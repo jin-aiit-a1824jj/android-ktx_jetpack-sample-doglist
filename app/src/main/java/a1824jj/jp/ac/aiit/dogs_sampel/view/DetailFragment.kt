@@ -11,8 +11,11 @@ import a1824jj.jp.ac.aiit.dogs_sampel.model.DogPaletter
 import a1824jj.jp.ac.aiit.dogs_sampel.model.SmsInfo
 import a1824jj.jp.ac.aiit.dogs_sampel.viewmodel.DetailViewModel
 import android.app.AlertDialog
+import android.app.PendingIntent
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.telephony.SmsManager
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -125,6 +128,9 @@ class DetailFragment : Fragment() {
     }
 
     private fun sendSms(smsInfo: SmsInfo) {
-
+        val intent = Intent(context, MainActivity::class.java)
+        val pi = PendingIntent.getActivity(context, 0, intent, 0)
+        val sms = SmsManager.getDefault()
+        sms.sendTextMessage(smsInfo.to, null, smsInfo.text, pi, null)
     }
 }
