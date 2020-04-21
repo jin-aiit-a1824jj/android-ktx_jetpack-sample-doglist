@@ -3,6 +3,7 @@ package a1824jj.jp.ac.aiit.dogs_sampel.viewmodel
 import a1824jj.jp.ac.aiit.dogs_sampel.model.DogBreed
 import a1824jj.jp.ac.aiit.dogs_sampel.model.DogDatabase
 import a1824jj.jp.ac.aiit.dogs_sampel.model.DogsApiService
+import a1824jj.jp.ac.aiit.dogs_sampel.util.NotificationsHelper
 import a1824jj.jp.ac.aiit.dogs_sampel.util.SharedPreferencesHelper
 import android.app.Application
 import android.widget.Toast
@@ -48,6 +49,7 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
                     override fun onSuccess(t: List<DogBreed>) {
                         storeDogsLocally(t)
                         Toast.makeText(getApplication(), "Dogs retrieved from endpoint", Toast.LENGTH_LONG).show()
+                        NotificationsHelper(getApplication()).createNotification()
                     }
 
                     override fun onError(e: Throwable) {
