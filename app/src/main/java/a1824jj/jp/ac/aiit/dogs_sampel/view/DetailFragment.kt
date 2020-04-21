@@ -5,22 +5,22 @@ import androidx.fragment.app.Fragment
 
 import a1824jj.jp.ac.aiit.dogs_sampel.R
 import a1824jj.jp.ac.aiit.dogs_sampel.databinding.FragmentDetailBinding
+import a1824jj.jp.ac.aiit.dogs_sampel.databinding.SendSmsDialogBinding
+import a1824jj.jp.ac.aiit.dogs_sampel.model.DogBreed
 import a1824jj.jp.ac.aiit.dogs_sampel.model.DogPaletter
-import a1824jj.jp.ac.aiit.dogs_sampel.util.getProgressDrawable
-import a1824jj.jp.ac.aiit.dogs_sampel.util.loadImage
+import a1824jj.jp.ac.aiit.dogs_sampel.model.SmsInfo
 import a1824jj.jp.ac.aiit.dogs_sampel.viewmodel.DetailViewModel
+import android.app.AlertDialog
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import kotlinx.android.synthetic.main.fragment_detail.*
 
 /**
  * A simple [Fragment] subclass.
@@ -31,7 +31,7 @@ class DetailFragment : Fragment() {
     private lateinit var viewModel: DetailViewModel
     private lateinit var dataBinding: FragmentDetailBinding
     private var sendSmsStarted = false
-
+    private var currentDog: DogBreed? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,6 +59,7 @@ class DetailFragment : Fragment() {
             it.imageUrl?.let { url ->
                 setupBackGroundColor(url)
             }
+            currentDog = it
         })
     }
 
@@ -105,6 +106,25 @@ class DetailFragment : Fragment() {
 
 
     fun onPermissionResult(permissionGranted: Boolean){
+        if(sendSmsStarted && permissionGranted){
+            context?.let {
+                val smsInfo = SmsInfo("", "${currentDog?.dogBreed} bred for ${currentDog?.bredFor}", currentDog?.imageUrl ?: "")
+                val dialogBinding = DataBindingUtil.inflate<SendSmsDialogBinding>(LayoutInflater.from(it), R.layout.send_sms_dialog, null, false)
+                dialogBinding.smsInfo = smsInfo
+
+                AlertDialog.Builder(it)
+                    .setView(dialogBinding.root)
+                    .setPositiveButton("Send Sms"){_,_ ->
+                        smsInfo.to = dialogBinding.smsDestination.text.toString()
+                        sendSms(smsInfo)
+                    }
+                    .setNegativeButton("Cancel"){_,_ -> }
+                    .show()
+            }
+        }
+    }
+
+    private fun sendSms(smsInfo: SmsInfo) {
 
     }
 }
